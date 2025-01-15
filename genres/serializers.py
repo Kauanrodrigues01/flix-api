@@ -20,18 +20,3 @@ class GenreSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError(errors)
         
         return data
-    
-    def create(self, validated_data):
-        genre = Genre.objects.create(**validated_data)
-        return genre
-    
-    def update(self, instance, validated_data):
-        instance.name = validated_data.get('name', instance.name)
-        instance.save()
-        return instance
-    
-    def delete(self, instance):
-        instance.delete()
-        return instance
-    
-    
