@@ -13,3 +13,7 @@ class GenreListCreateView(generics.ListCreateAPIView):
            return queryset.filter(name__icontains=name)
         
         return super().filter_queryset(queryset)
+    
+class GenreRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Genre.objects.all()
+    serializer_class = GenreSerializer

@@ -2,5 +2,6 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    path('', views.GenreListCreateView.as_view(), name='genre_list'),
+    path('', views.GenreListCreateView.as_view(), name='genre-list-create'),
+    path('<uuid:pk>/', views.GenreRetrieveUpdateDestroyView.as_view(), name='genre-retrieve-update-destroy')
 ]
