@@ -37,7 +37,8 @@ THIRD_PARTY_APPS = [
 
 LOCAL_APPS = [
     'genres',
-    'actors'
+    'actors',
+    'movies',
 ]
 
 DJANGO_APPS = [
