@@ -1,0 +1,16 @@
+services:
+  flix-api:
+    container_name: flix-api
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    env_file:
+      - .env
+    ports:
+      - "8000:8000"
+    networks:
+      - flix-api-network
+
+networks:
+  flix-api-network:
+    driver: bridge
