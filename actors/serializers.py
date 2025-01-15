@@ -13,7 +13,6 @@ class ActorSerializer(serializers.ModelSerializer):
         birthday = data.get('birthday', None)
         nationality = data.get('nationality', None)
         current_date = datetime.today().date()
-        request_method = self.context['request'].method
         errors = defaultdict(list)
 
         if name:
@@ -23,8 +22,8 @@ class ActorSerializer(serializers.ModelSerializer):
                 errors['name'].append('Name should be at least 3 characters long')
         
         if birthday:
-            if birthday and birthday > current_date:
-                errors['birthday'].append(f'Birthday cannot be in the future. Current date: {current_date.strftime("%Y-%m-%d")}')
+            if birthday > current_date:
+                errors['birthday'].append(f'Birthday cannot be in the future. Current date: {current_date.strftime('%Y-%m-%d')}')
         
         if errors:
             raise serializers.ValidationError(errors)
