@@ -35,7 +35,9 @@ THIRD_PARTY_APPS = [
     'rest_framework',
 ]
 
-LOCAL_APPS = []
+LOCAL_APPS = [
+    'genres',
+]
 
 DJANGO_APPS = [
     'django.contrib.admin',
