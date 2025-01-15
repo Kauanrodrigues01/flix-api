@@ -39,6 +39,7 @@ LOCAL_APPS = [
     'genres',
     'actors',
     'movies',
+    'reviews'
 ]
 
 DJANGO_APPS = [
