@@ -2,13 +2,27 @@ from rest_framework import serializers
 from .models import Movie
 from collections import defaultdict
 from datetime import datetime
+from django.db.models import Avg
 
 
 class MovieSerializer(serializers.ModelSerializer):
+    rate = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = Movie
         fields = '__all__'
+
+    def get_rate(self, obj):
+        try:
+            average_stars = obj.reviews.aggregate(average_stars=Avg('stars'))['average_stars']
+
+            if average_stars is None:
+                return 0
+            return round(average_stars, 2)
+
+        except Exception as e:
+            print(f"Unexpected error while calculating rate: {e}")
+            return 0
 
     def validate(self, data):
         title = data.get('title', None)
