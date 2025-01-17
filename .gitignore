@@ -269,3 +269,7 @@ pyrightconfig.json
 
 poetry.lock
 pyproject.toml
+
+/scripts/querys.py
+/scripts/populate.py
+/scripts/populate_command.py
