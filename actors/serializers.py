@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Actor, NATIONALITY_CHOICES
+from .models import Actor
 from collections import defaultdict
 from datetime import datetime
 
