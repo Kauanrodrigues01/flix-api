@@ -273,3 +273,5 @@ pyproject.toml
 /scripts/querys.py
 /scripts/populate.py
 /scripts/populate_command.py
+
+docker-compose-dev.yml
