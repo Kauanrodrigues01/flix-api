@@ -3,11 +3,15 @@ from .models import Review
 from .serializers import ReviewSerializer
 from movies.models import Movie
 from rest_framework.exceptions import NotFound
+from utils.pagination import create_pagination_class
+
+Pagination = create_pagination_class(page_size=30, page_size_query_param='page_size', max_page_size=100)
 
 
 class ReviewListCreate(generics.ListCreateAPIView):
     queryset = Review.objects.all()
     serializer_class = ReviewSerializer
+    pagination_class = Pagination
 
     def filter_queryset(self, queryset):
         movie_id = self.request.query_params.get('movie', None)

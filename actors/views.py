@@ -3,11 +3,15 @@ from .models import Actor
 from movies.models import Movie
 from .serializers import ActorSerializer
 from rest_framework.exceptions import NotFound
+from utils.pagination import create_pagination_class
+
+Pagination = create_pagination_class(page_size=30, page_size_query_param='page_size', max_page_size=100)
 
 
 class ActorListCreateView(generics.ListCreateAPIView):
     queryset = Actor.objects.all()
     serializer_class = ActorSerializer
+    pagination_class = Pagination
 
     def filter_queryset(self, queryset):
         name = self.request.query_params.get('name', None)

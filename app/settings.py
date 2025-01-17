@@ -33,6 +33,7 @@ ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='*', cast=Csv())
 
 THIRD_PARTY_APPS = [
     'rest_framework',
+    'django_filters'
 ]
 
 LOCAL_APPS = [
