@@ -5,12 +5,12 @@ from django_filters.rest_framework import DjangoFilterBackend
 from .filters import MovieFilter
 
 class MovieListCreateView(generics.ListCreateAPIView):
-    queryset = Movie.objects.all()
+    queryset = Movie.objects.prefetch_related('actors').all()
     serializer_class = MovieSerializer
     filter_backends = [DjangoFilterBackend]
     filterset_class = MovieFilter
     
     
 class MovieRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Movie.objects.all()
+    queryset = Movie.objects.prefetch_related('actors').all()
     serializer_class = MovieSerializer
