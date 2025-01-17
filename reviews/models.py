@@ -3,6 +3,7 @@ from django.db import models
 from django.core.validators import MaxValueValidator, MinValueValidator
 from movies.models import Movie
 
+
 class Review(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     movie = models.ForeignKey(Movie, on_delete=models.PROTECT, related_name='reviews')
@@ -13,6 +14,6 @@ class Review(models.Model):
         ]
     )
     comment = models.TextField(null=True, blank=True)
-    
+
     def __str__(self):
         return f'{str(self.movie)} | starts: {self.stars}'

@@ -60,7 +60,12 @@ class Actor(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField(max_length=200)
     birthday = models.DateField(null=True, blank=True)
-    nationality = models.CharField(max_length=100, choices=NATIONALITY_CHOICES, null=True, blank=True)
-    
+    nationality = models.CharField(
+        max_length=100,
+        choices=NATIONALITY_CHOICES,
+        null=True,
+        blank=True
+    )
+
     def __str__(self):
         return self.name
