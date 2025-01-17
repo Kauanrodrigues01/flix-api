@@ -9,7 +9,7 @@ class Review(models.Model):
     stars = models.IntegerField(
         validators=[
             MinValueValidator(0, 'Rating cannot be less than 0 stars.'),
-            MaxValueValidator(5, 'Rating cannot be higher than 0 stars.')
+            MaxValueValidator(5, 'Rating cannot be higher than 5 stars.')
         ]
     )
     comment = models.TextField(null=True, blank=True)
