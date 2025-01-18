@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 from pathlib import Path
 from decouple import config, Csv
 from dj_database_url import parse as dburl
+from datetime import timedelta
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -34,14 +35,17 @@ ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='*', cast=Csv())
 
 THIRD_PARTY_APPS = [
     'rest_framework',
-    'django_filters'
+    'django_filters',
+    'rest_framework_simplejwt',
+    'rest_framework_simplejwt.token_blacklist',
 ]
 
 LOCAL_APPS = [
     'genres',
     'actors',
     'movies',
-    'reviews'
+    'reviews',
+    'accounts',
 ]
 
 DJANGO_APPS = [
@@ -144,3 +148,27 @@ STATIC_ROOT = BASE_DIR / 'static'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+AUTH_USER_MODEL = 'accounts.User'
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    )
+}
+
+SIMPLE_JWT = {
+    "ACCESS_TOKEN_LIFETIME": timedelta(
+        seconds=config("ACCESS_TOKEN_LIFETIME_SECONDS", cast=int)
+    ),
+    "REFRESH_TOKEN_LIFETIME": timedelta(
+        seconds=config("REFRESH_TOKEN_LIFETIME_SECONDS", cast=int)
+    ),
+    "ROTATE_REFRESH_TOKENS": True,
+    "BLACKLIST_AFTER_ROTATION": True,
+
+    "TOKEN_OBTAIN_SERIALIZER": "rest_framework_simplejwt.serializers.TokenObtainPairSerializer",
+    "TOKEN_REFRESH_SERIALIZER": "rest_framework_simplejwt.serializers.TokenRefreshSerializer",
+    "TOKEN_VERIFY_SERIALIZER": "rest_framework_simplejwt.serializers.TokenVerifySerializer",
+    "TOKEN_BLACKLIST_SERIALIZER": "rest_framework_simplejwt.serializers.TokenBlacklistSerializer",
+}

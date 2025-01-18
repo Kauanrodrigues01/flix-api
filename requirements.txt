@@ -5,3 +5,4 @@ uWSGI==2.0.28
 django-filter==24.3
 dj-database-url==2.3.0
 psycopg2-binary==2.9.10
+djangorestframework-simplejwt==5.4.0
