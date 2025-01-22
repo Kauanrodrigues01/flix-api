@@ -1,8 +1,9 @@
 from rest_framework import generics, status
+from rest_framework.response import Response
+
+from app.permissions import ModelPermission
 from genres.models import Genre
 from genres.serializers import GenreSerializer
-from rest_framework.response import Response
-from app.permissions import ModelPermission
 
 
 class GenreListCreateView(generics.ListCreateAPIView):

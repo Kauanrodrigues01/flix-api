@@ -1,6 +1,8 @@
 import uuid
+
 from django.db import models
 from django.core.validators import MaxValueValidator, MinValueValidator
+
 from movies.models import Movie
 from accounts.models import User
 

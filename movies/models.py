@@ -1,5 +1,7 @@
 import uuid
+
 from django.db import models
+
 from genres.models import Genre
 from actors.models import Actor
 

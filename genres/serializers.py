@@ -1,6 +1,6 @@
+from collections import defaultdict
 from rest_framework import serializers
 from genres.models import Genre
-from collections import defaultdict
 
 
 class GenreSerializer(serializers.ModelSerializer):

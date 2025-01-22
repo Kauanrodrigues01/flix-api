@@ -1,12 +1,12 @@
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import generics, status
 from rest_framework.response import Response
-from rest_framework import status
-from rest_framework import generics
+
+from app.permissions import ModelPermission
+from utils.pagination import create_pagination_class
+from .filters import MovieFilter
 from .models import Movie
 from .serializers import MovieSerializer
-from django_filters.rest_framework import DjangoFilterBackend
-from .filters import MovieFilter
-from utils.pagination import create_pagination_class
-from app.permissions import ModelPermission
 
 Pagination = create_pagination_class(page_size=30, page_size_query_param='page_size', max_page_size=100)
 

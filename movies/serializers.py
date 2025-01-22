@@ -1,8 +1,10 @@
-from rest_framework import serializers
-from .models import Movie
-from collections import defaultdict
 from datetime import datetime
+from collections import defaultdict
+
 from django.db.models import Avg
+from rest_framework import serializers
+
+from .models import Movie
 
 
 class MovieSerializer(serializers.ModelSerializer):
