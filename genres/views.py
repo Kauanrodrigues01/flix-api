@@ -1,7 +1,8 @@
 from rest_framework import generics, status
 from genres.models import Genre
 from genres.serializers import GenreSerializer
-from django.http import JsonResponse
+from rest_framework.response import Response
+from rest_framework.permissions import AllowAny, IsAdminUser
 
 
 class GenreListCreateView(generics.ListCreateAPIView):
@@ -16,6 +17,12 @@ class GenreListCreateView(generics.ListCreateAPIView):
 
         return super().filter_queryset(queryset)
 
+    def get_permissions(self):
+        if self.request.method == 'GET':
+            return [AllowAny()]
+
+        return [IsAdminUser()]
+
 
 class GenreRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Genre.objects.all()
@@ -24,9 +31,15 @@ class GenreRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
     def destroy(self, request, *args, **kwargs):
         genre = self.get_object()
         if genre.movies.exists():
-            return JsonResponse(
+            return Response(
                 {'error': 'Cannot delete genre with related movies.'},
                 status=status.HTTP_502_BAD_GATEWAY
             )
 
         return super().destroy(request, *args, **kwargs)
+
+    def get_permissions(self):
+        if self.request.method == 'GET':
+            return [AllowAny()]
+
+        return [IsAdminUser()]

@@ -4,6 +4,7 @@ from .serializers import ReviewSerializer
 from movies.models import Movie
 from rest_framework.exceptions import NotFound
 from utils.pagination import create_pagination_class
+from .permissions import ReviewPermission
 
 Pagination = create_pagination_class(page_size=30, page_size_query_param='page_size', max_page_size=100)
 
@@ -12,6 +13,7 @@ class ReviewListCreate(generics.ListCreateAPIView):
     queryset = Review.objects.all()
     serializer_class = ReviewSerializer
     pagination_class = Pagination
+    permission_classes = [ReviewPermission,]
 
     def filter_queryset(self, queryset):
         movie_id = self.request.query_params.get('movie', None)
@@ -54,3 +56,10 @@ class ReviewListCreate(generics.ListCreateAPIView):
 class ReviewRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
     queryset = Review.objects.all()
     serializer_class = ReviewSerializer
+    permission_classes = [ReviewPermission,]
+
+    def get_queryset(self):
+        user = self.request.user
+        if user.is_staff or not user.is_authenticated or self.request.method == 'GET':
+            return self.queryset
+        return Review.objects.filter(user=user)

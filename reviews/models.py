@@ -2,10 +2,12 @@ import uuid
 from django.db import models
 from django.core.validators import MaxValueValidator, MinValueValidator
 from movies.models import Movie
+from accounts.models import User
 
 
 class Review(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, related_name='reviews', null=True, blank=True)
     movie = models.ForeignKey(Movie, on_delete=models.PROTECT, related_name='reviews')
     stars = models.IntegerField(
         validators=[

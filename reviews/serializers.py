@@ -7,7 +7,7 @@ class ReviewSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Review
-        fields = '__all__'
+        exclude = ['user']
 
     def validate(self, data):
         movie = data.get('movie', None)
@@ -27,3 +27,7 @@ class ReviewSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError(errors)
 
         return data
+
+    def create(self, validated_data):
+        validated_data['user'] = self.context['request'].user
+        return super().create(validated_data)
