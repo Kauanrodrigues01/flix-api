@@ -2,7 +2,7 @@ from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import generics, status
 from rest_framework.response import Response
 
-from app.permissions import ModelPermission
+from app.permissions import GlobalDefaultModelPermission
 from utils.pagination import create_pagination_class
 from .filters import MovieFilter
 from .models import Movie
@@ -17,13 +17,13 @@ class MovieListCreateView(generics.ListCreateAPIView):
     filter_backends = [DjangoFilterBackend]
     filterset_class = MovieFilter
     pagination_class = Pagination
-    permission_classes = [ModelPermission]
+    permission_classes = [GlobalDefaultModelPermission]
 
 
 class MovieRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Movie.objects.prefetch_related('actors').all()
     serializer_class = MovieSerializer
-    permission_classes = [ModelPermission]
+    permission_classes = [GlobalDefaultModelPermission]
 
     def destroy(self, request, *args, **kwargs):
         movie = self.get_object()

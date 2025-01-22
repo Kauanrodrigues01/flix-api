@@ -1,7 +1,7 @@
 from rest_framework.permissions import BasePermission
 
 
-class ModelPermission(BasePermission):
+class GlobalDefaultModelPermission(BasePermission):
     """
     Generic permission class to handle CRUD permissions for any model.
     Assumes permissions are in the format:

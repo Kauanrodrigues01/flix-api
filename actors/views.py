@@ -4,7 +4,7 @@ from rest_framework.exceptions import NotFound
 from .models import Actor
 from .serializers import ActorSerializer
 from movies.models import Movie
-from app.permissions import ModelPermission
+from app.permissions import GlobalDefaultModelPermission
 from utils.pagination import create_pagination_class
 
 
@@ -15,7 +15,7 @@ class ActorListCreateView(generics.ListCreateAPIView):
     queryset = Actor.objects.all()
     serializer_class = ActorSerializer
     pagination_class = Pagination
-    permission_classes = [ModelPermission]
+    permission_classes = [GlobalDefaultModelPermission]
 
     def filter_queryset(self, queryset):
         name = self.request.query_params.get('name', None)
@@ -38,4 +38,4 @@ class ActorListCreateView(generics.ListCreateAPIView):
 class ActorRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Actor.objects.all()
     serializer_class = ActorSerializer
-    permission_classes = [ModelPermission]
+    permission_classes = [GlobalDefaultModelPermission]
