@@ -2,12 +2,13 @@ from rest_framework import generics, status
 from genres.models import Genre
 from genres.serializers import GenreSerializer
 from rest_framework.response import Response
-from rest_framework.permissions import AllowAny, IsAdminUser
+from app.permissions import ModelPermission
 
 
 class GenreListCreateView(generics.ListCreateAPIView):
     queryset = Genre.objects.all()
     serializer_class = GenreSerializer
+    permission_classes = [ModelPermission]
 
     def filter_queryset(self, queryset):
         name = self.request.query_params.get('name', None)
@@ -17,16 +18,12 @@ class GenreListCreateView(generics.ListCreateAPIView):
 
         return super().filter_queryset(queryset)
 
-    def get_permissions(self):
-        if self.request.method == 'GET':
-            return [AllowAny()]
-
-        return [IsAdminUser()]
 
 
 class GenreRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Genre.objects.all()
     serializer_class = GenreSerializer
+    permission_classes = [ModelPermission]
 
     def destroy(self, request, *args, **kwargs):
         genre = self.get_object()
@@ -38,8 +35,3 @@ class GenreRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
 
         return super().destroy(request, *args, **kwargs)
 
-    def get_permissions(self):
-        if self.request.method == 'GET':
-            return [AllowAny()]
-
-        return [IsAdminUser()]

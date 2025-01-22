@@ -6,7 +6,7 @@ from .serializers import MovieSerializer
 from django_filters.rest_framework import DjangoFilterBackend
 from .filters import MovieFilter
 from utils.pagination import create_pagination_class
-from rest_framework.permissions import AllowAny, IsAdminUser
+from app.permissions import ModelPermission
 
 Pagination = create_pagination_class(page_size=30, page_size_query_param='page_size', max_page_size=100)
 
@@ -17,22 +17,13 @@ class MovieListCreateView(generics.ListCreateAPIView):
     filter_backends = [DjangoFilterBackend]
     filterset_class = MovieFilter
     pagination_class = Pagination
-
-    def get_permissions(self):
-        if self.request.method == 'GET':
-            return [AllowAny()]
-
-        return [IsAdminUser()]
+    permission_classes = [ModelPermission]
 
 
 class MovieRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Movie.objects.prefetch_related('actors').all()
     serializer_class = MovieSerializer
-
-    def get_permissions(self):
-        if self.request.method == 'GET':
-            return [AllowAny()]
-        return [IsAdminUser()]
+    permission_classes = [ModelPermission]
 
     def destroy(self, request, *args, **kwargs):
         movie = self.get_object()
