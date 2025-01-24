@@ -7,24 +7,32 @@ from utils.pagination import create_pagination_class
 from reviews.models import Review
 from .filters import MovieFilter
 from .models import Movie
-from .serializers import MovieSerializer
+from .serializers import MovieSerializer, MovieListDetailSerializer
 
 Pagination = create_pagination_class(page_size=30, page_size_query_param='page_size', max_page_size=100)
 
 
 class MovieListCreateView(generics.ListCreateAPIView):
     queryset = Movie.objects.select_related('genre').prefetch_related('actors').all()
-    serializer_class = MovieSerializer
     filter_backends = [DjangoFilterBackend]
     filterset_class = MovieFilter
     pagination_class = Pagination
     permission_classes = [GlobalDefaultModelPermission]
 
+    def get_serializer_class(self):
+        if self.request.method == 'GET':
+            return MovieListDetailSerializer
+        return MovieSerializer
+
 
 class MovieRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Movie.objects.prefetch_related('actors').all()
-    serializer_class = MovieSerializer
     permission_classes = [GlobalDefaultModelPermission]
+
+    def get_serializer_class(self):
+        if self.request.method == 'GET':
+            return MovieListDetailSerializer
+        return MovieSerializer
 
     def destroy(self, request, *args, **kwargs):
         movie = self.get_object()

@@ -9,9 +9,29 @@ from genres.serializers import GenreSerializer
 from .models import Movie
 
 
-class MovieSerializer(serializers.ModelSerializer):
+class MovieListDetailSerializer(serializers.ModelSerializer):
     actors = ActorSerializer(many=True)
     genre = GenreSerializer()
+    rate = serializers.SerializerMethodField(read_only=True)
+
+    class Meta:
+        model = Movie
+        fields = '__all__'
+
+    def get_rate(self, obj):
+        try:
+            average_stars = obj.reviews.aggregate(average_stars=Avg('stars'))['average_stars']
+
+            if average_stars is None:
+                return 0
+            return round(average_stars, 2)
+
+        except Exception as e:
+            print(f"Unexpected error while calculating rate: {e}")
+            return 0
+
+
+class MovieSerializer(serializers.ModelSerializer):
     rate = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
