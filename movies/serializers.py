@@ -4,10 +4,14 @@ from collections import defaultdict
 from django.db.models import Avg
 from rest_framework import serializers
 
+from actors.serializers import ActorSerializer
+from genres.serializers import GenreSerializer
 from .models import Movie
 
 
 class MovieSerializer(serializers.ModelSerializer):
+    actors = ActorSerializer(many=True)
+    genre = GenreSerializer()
     rate = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
