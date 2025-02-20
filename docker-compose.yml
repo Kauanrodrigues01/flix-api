@@ -1,10 +1,9 @@
 services:
   flix-api:
     container_name: flix-api
-    # build: 
-    #   context: .
-    #   dockerfile: Dockerfile
-    image: flix-app:0.0.1
+    build: 
+      context: .
+      dockerfile: Dockerfile
     environment:
       - DATABASE_URL=postgres://flixuser:flixpassword@flix-db:5432/flixdb
     env_file:
