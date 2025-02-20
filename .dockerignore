@@ -92,3 +92,5 @@ venv/
 
 db.sqlite3
 README.md
+.flake8
+LICENSE

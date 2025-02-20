@@ -1,16 +1,40 @@
 services:
   flix-api:
     container_name: flix-api
-    build: 
-      context: .
-      dockerfile: Dockerfile
+    # build: 
+    #   context: .
+    #   dockerfile: Dockerfile
+    image: flix-app:0.0.1
+    environment:
+      - DATABASE_URL=postgres://flixuser:flixpassword@flix-db:5432/flixdb
     env_file:
       - .env
+    command: ["sh", "-c", "python manage.py migrate && python manage.py collectstatic --no-input && uwsgi --ini uwsgi.ini"]
     ports:
       - "8000:8000"
     networks:
       - flix-api-network
+    depends_on:
+      - flix-db
+
+  flix-db:
+    container_name: flix-db
+    image: postgres:17.2-alpine
+    restart: always
+    environment:
+      POSTGRES_DB: flixdb
+      POSTGRES_USER: flixuser
+      POSTGRES_PASSWORD: flixpassword
+    ports:
+      - "5432:5432"
+    networks:
+      - flix-api-network
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
 
 networks:
   flix-api-network:
     driver: bridge
+
+volumes:
+  postgres_data:
