@@ -5,6 +5,7 @@ from rest_framework_simplejwt.views import (
     TokenVerifyView,
     TokenBlacklistView
 )
+
 from .views import CreateUserView
 
 app_name = 'accounts'

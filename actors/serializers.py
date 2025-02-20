@@ -1,7 +1,7 @@
-from rest_framework import serializers
-from .models import Actor
 from collections import defaultdict
 from datetime import datetime
+from rest_framework import serializers
+from .models import Actor
 
 
 class ActorSerializer(serializers.ModelSerializer):

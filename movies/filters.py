@@ -1,4 +1,5 @@
 from django_filters import rest_framework as filters
+
 from .models import Movie
 from genres.models import Genre
 from actors.models import Actor

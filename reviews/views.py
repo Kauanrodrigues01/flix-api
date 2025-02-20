@@ -1,10 +1,12 @@
 from rest_framework import generics
-from .models import Review
-from .serializers import ReviewSerializer
-from movies.models import Movie
 from rest_framework.exceptions import NotFound
+
+from movies.models import Movie
 from utils.pagination import create_pagination_class
+
+from .models import Review
 from .permissions import ReviewPermission
+from .serializers import ReviewSerializer
 
 Pagination = create_pagination_class(page_size=30, page_size_query_param='page_size', max_page_size=100)
 

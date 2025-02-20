@@ -1,6 +1,6 @@
+from collections import defaultdict
 from rest_framework import serializers
 from .models import Review
-from collections import defaultdict
 
 
 class ReviewSerializer(serializers.ModelSerializer):
