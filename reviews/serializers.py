@@ -17,11 +17,11 @@ class ReviewSerializer(serializers.ModelSerializer):
 
         if request_method in ['PUT', 'PATCH']:
             if movie:
-                errors['movie'].append('You cannot change the movie for an existing review.')
+                errors['movie'].append('Você não pode alterar o filme de uma avaliação.')
 
         if comment:
             if len(comment) < 3:
-                errors['comment'].append('Comment must be at least 3 characters long.')
+                errors['comment'].append('Comentário deve ter pelo menos 3 caracteres.')
 
         if errors:
             raise serializers.ValidationError(errors)

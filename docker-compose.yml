@@ -19,7 +19,6 @@ services:
   flix-db:
     container_name: flix-db
     image: postgres:17.2-alpine
-    restart: always
     environment:
       POSTGRES_DB: flixdb
       POSTGRES_USER: flixuser

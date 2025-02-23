@@ -13,9 +13,9 @@ class GenreSerializer(serializers.ModelSerializer):
         errors = defaultdict(list)
 
         if Genre.objects.filter(name__iexact=name).exists():
-            errors['name'].append('Name already exists')
+            errors['name'].append('Nome já existe')
         if len(name) < 3:
-            errors['name'].append('Name should be at least 3 characters long')
+            errors['name'].append('Nome deve ter pelo menos 3 caracteres')
 
         if errors:
             raise serializers.ValidationError(errors)

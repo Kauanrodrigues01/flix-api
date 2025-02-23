@@ -18,13 +18,13 @@ class ActorSerializer(serializers.ModelSerializer):
 
         if name:
             if Actor.objects.filter(name__iexact=name).exists():
-                errors['name'].append('Name already exists')
+                errors['name'].append('Nome já existe')
             if len(name) < 3:
-                errors['name'].append('Name should be at least 3 characters long')
+                errors['name'].append('Nome deve ter pelo menos 3 caracteres')
 
         if birthday:
             if birthday > current_date:
-                errors['birthday'].append(f'Birthday cannot be in the future. Current date: {current_date_str}')
+                errors['birthday'].append(f'Data de aniversário não pode ser no futuro. Data atual: {current_date_str}')
 
         if errors:
             raise serializers.ValidationError(errors)

@@ -59,17 +59,17 @@ class MovieSerializer(serializers.ModelSerializer):
 
         if title:
             if Movie.objects.filter(title__iexact=title).exists():
-                errors['title'].append('Title already exists')
+                errors['title'].append('Título já existe')
             if len(title) < 3:
-                errors['title'].append('Title should be at least 3 characters long')
+                errors['title'].append('Título deve ter pelo menos 3 caracteres')
 
         if release_date:
             if release_date > current_date:
-                errors['release_date'].append(f'Release date cannot be in the future. Current date: {current_date.strftime('%Y-%m-%d')}')
+                errors['release_date'].append(f'Data de lançamento não pode ser no futuro. Data atual: {current_date.strftime('%Y-%m-%d')}')
 
         if resume:
             if len(resume) < 10:
-                errors['resume'].append('The resume must be at least 10 characters long.')
+                errors['resume'].append('O resumo deve ter pelo menos 10 caracteres')
 
         if errors:
             raise serializers.ValidationError(errors)
