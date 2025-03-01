@@ -1,36 +1,17 @@
-from rest_framework import generics, status
-from rest_framework.response import Response
-
-from app.permissions import GlobalDefaultModelPermission
+from rest_framework import generics
+from rest_framework.permissions import IsAuthenticated
+from app.permissions import GlobalDefaultPermission
 from genres.models import Genre
 from genres.serializers import GenreSerializer
 
 
-class GenreListCreateView(generics.ListCreateAPIView):
+class GenreCreateListView(generics.ListCreateAPIView):
+    permission_classes = (IsAuthenticated, GlobalDefaultPermission,)
     queryset = Genre.objects.all()
     serializer_class = GenreSerializer
-    permission_classes = [GlobalDefaultModelPermission]
-
-    def filter_queryset(self, queryset):
-        name = self.request.query_params.get('name', None)
-
-        if name:
-            return queryset.filter(name__icontains=name)
-
-        return super().filter_queryset(queryset)
 
 
 class GenreRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
+    permission_classes = (IsAuthenticated, GlobalDefaultPermission,)
     queryset = Genre.objects.all()
     serializer_class = GenreSerializer
-    permission_classes = [GlobalDefaultModelPermission]
-
-    def destroy(self, request, *args, **kwargs):
-        genre = self.get_object()
-        if genre.movies.exists():
-            return Response(
-                {'error': 'Cannot delete genre with related movies.'},
-                status=status.HTTP_502_BAD_GATEWAY
-            )
-
-        return super().destroy(request, *args, **kwargs)

@@ -1,12 +1,41 @@
-from datetime import datetime
-from collections import defaultdict
-
 from django.db.models import Avg
 from rest_framework import serializers
-
 from actors.serializers import ActorSerializer
+from movies.models import Movie
+from genres.models import Genre
 from genres.serializers import GenreSerializer
-from .models import Movie
+from actors.models import Actor
+
+
+class MovieSerializer(serializers.Serializer):
+    id = serializers.IntegerField()
+    title = serializers.CharField()
+    genre = serializers.PrimaryKeyRelatedField(
+        queryset=Genre.objects.all(),
+    )
+    release_date = serializers.DateField()
+    actors = serializers.PrimaryKeyRelatedField(
+        queryset=Actor.objects.all(),
+        many=True,
+    )
+    resume = serializers.CharField()
+
+
+class MovieModelSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Movie
+        fields = '__all__'
+
+    def validate_release_date(self, value):
+        if value.year < 1900:
+            raise serializers.ValidationError('A data de lançamento não pode ser anterior a 1900.')
+        return value
+
+    def validate_resume(self, value):
+        if len(value) > 500:
+            raise serializers.ValidationError('Resumo não deve ser maior do que 500 caracteres.')
+        return value
 
 
 class MovieListDetailSerializer(serializers.ModelSerializer):
@@ -16,62 +45,19 @@ class MovieListDetailSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Movie
-        fields = '__all__'
+        fields = ['id', 'title', 'genre', 'actors', 'release_date', 'rate', 'resume']
 
     def get_rate(self, obj):
-        try:
-            average_stars = obj.reviews.aggregate(average_stars=Avg('stars'))['average_stars']
+        rate = obj.reviews.aggregate(Avg('stars'))['stars__avg']
 
-            if average_stars is None:
-                return 0
-            return round(average_stars, 2)
+        if rate:
+            return round(rate, 1)
 
-        except Exception as e:
-            print(f"Unexpected error while calculating rate: {e}")
-            return 0
+        return None
 
 
-class MovieSerializer(serializers.ModelSerializer):
-    rate = serializers.SerializerMethodField(read_only=True)
-
-    class Meta:
-        model = Movie
-        fields = '__all__'
-
-    def get_rate(self, obj):
-        try:
-            average_stars = obj.reviews.aggregate(average_stars=Avg('stars'))['average_stars']
-
-            if average_stars is None:
-                return 0
-            return round(average_stars, 2)
-
-        except Exception as e:
-            print(f"Unexpected error while calculating rate: {e}")
-            return 0
-
-    def validate(self, data):
-        title = data.get('title', None)
-        release_date = data.get('release_date', None)
-        resume = data.get('resume', None)
-        current_date = datetime.today().date()
-        errors = defaultdict(list)
-
-        if title:
-            if Movie.objects.filter(title__iexact=title).exists():
-                errors['title'].append('Título já existe')
-            if len(title) < 3:
-                errors['title'].append('Título deve ter pelo menos 3 caracteres')
-
-        if release_date:
-            if release_date > current_date:
-                errors['release_date'].append(f'Data de lançamento não pode ser no futuro. Data atual: {current_date.strftime('%Y-%m-%d')}')
-
-        if resume:
-            if len(resume) < 10:
-                errors['resume'].append('O resumo deve ter pelo menos 10 caracteres')
-
-        if errors:
-            raise serializers.ValidationError(errors)
-
-        return data
+class MovieStatsSerializer(serializers.Serializer):
+    total_movies = serializers.IntegerField()
+    movies_by_genre = serializers.ListField()
+    total_reviews = serializers.IntegerField()
+    average_stars = serializers.FloatField()

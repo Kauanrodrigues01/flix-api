@@ -2,9 +2,7 @@ from django.urls import path
 from . import views
 
 
-app_name = 'actors'
-
 urlpatterns = [
-    path('actors/', views.ActorListCreateView.as_view(), name='actors-list-create'),
-    path('actors/<uuid:pk>/', views.ActorRetrieveUpdateDestroyView.as_view(), name='actors-retrieve-update-destroy'),
+    path('actors/', views.ActorCreateListView.as_view(), name='actor-create-list'),
+    path('actors/<int:pk>/', views.ActorRetrieveUpdateDestroyView.as_view(), name='actor-detail-view'),
 ]

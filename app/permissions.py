@@ -1,37 +1,36 @@
-from rest_framework.permissions import BasePermission
+from rest_framework import permissions
 
 
-class GlobalDefaultModelPermission(BasePermission):
-    """
-    Generic permission class to handle CRUD permissions for any model.
-    Assumes permissions are in the format:
-    'app_label.add_model', 'app_label.change_model', 'app_label.delete_model'.
-    """
+class GlobalDefaultPermission(permissions.BasePermission):
 
     def has_permission(self, request, view):
-        user = request.user
-        method = request.method
-        app_name = view.queryset.model._meta.app_label
-        model_name = view.queryset.model._meta.model_name
+        model_permission_codename = self.__get_model_permission_codename(
+            method=request.method,
+            view=view,
+        )
 
-        if user.is_staff:
-            return True
-
-        if method == 'GET':
-            return True
-
-        if not user.is_authenticated:
+        if not model_permission_codename:
             return False
 
-        permission_map = {
-            'POST': f'{app_name}.add_{model_name}',
-            'PUT': f'{app_name}.change_{model_name}',
-            'PATCH': f'{app_name}.change_{model_name}',
-            'DELETE': f'{app_name}.delete_{model_name}'
+        return request.user.has_perm(model_permission_codename)
+
+    def __get_model_permission_codename(self, method, view):
+        try:
+            model_name = view.queryset.model._meta.model_name
+            app_label = view.queryset.model._meta.app_label
+            action = self.__get_action_sufix(method)
+            return f'{app_label}.{action}_{model_name}'
+        except AttributeError:
+            return None
+
+    def __get_action_sufix(self, method):
+        method_actions = {
+            'GET': 'view',
+            'POST': 'add',
+            'PUT': 'change',
+            'PATCH': 'change',
+            'DELETE': 'delete',
+            'OPTIONS': 'view',
+            'HEAD': 'view',
         }
-
-        required_permission = permission_map.get(method)
-        if required_permission:
-            return user.has_perm(required_permission)
-
-        return False
+        return method_actions.get(method, '')

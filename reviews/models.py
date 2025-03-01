@@ -1,23 +1,21 @@
-import uuid
-
 from django.db import models
-from django.core.validators import MaxValueValidator, MinValueValidator
-
+from django.core.validators import MinValueValidator, MaxValueValidator
 from movies.models import Movie
-from accounts.models import User
 
 
 class Review(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    user = models.ForeignKey(User, on_delete=models.SET_NULL, related_name='reviews', null=True, blank=True)
-    movie = models.ForeignKey(Movie, on_delete=models.PROTECT, related_name='reviews')
+    movie = models.ForeignKey(
+        Movie,
+        on_delete=models.PROTECT,
+        related_name='reviews'
+    )
     stars = models.IntegerField(
         validators=[
-            MinValueValidator(0, 'Rating cannot be less than 0 stars.'),
-            MaxValueValidator(5, 'Rating cannot be higher than 5 stars.')
+            MinValueValidator(0, 'Avaliação não pode ser inferior a 0 estrelas.'),
+            MaxValueValidator(5, 'Avaliação não pode ser superior a 5 estrelas.'),
         ]
     )
     comment = models.TextField(null=True, blank=True)
 
     def __str__(self):
-        return f'{str(self.movie)} | starts: {self.stars}'
+        return str(self.movie)
