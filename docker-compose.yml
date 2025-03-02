@@ -8,7 +8,7 @@ services:
       - DATABASE_URL=postgres://flixuser:flixpassword@flix-db:5432/flixdb
     env_file:
       - .env
-    command: ["sh", "-c", "python manage.py migrate && python manage.py collectstatic --no-input && uwsgi --ini uwsgi.ini"]
+    command: ["sh", "-c", "python manage.py migrate && python manage.py collectstatic --no-input && python manage.py runserver 0:8000"]
     ports:
       - "8000:8000"
     networks:
