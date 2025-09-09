@@ -287,4 +287,4 @@ Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para ma
 **Kauan Rodrigues Lima**
 
 - GitHub: [@Kauanrodrigues01](https://github.com/Kauanrodrigues01)
-- LinkedIn: [Seu LinkedIn](https://linkedin.com/in/seu-perfil)
+- LinkedIn: [Seu LinkedIn](https://www.linkedin.com/in/kauan-rodrigues-lima/)
